@@ -41,7 +41,7 @@ const EscalasList = () => {
               <Tr>
                 <Th>Igreja</Th>
                 <Th>Horário</Th>
-                <Th>Data de criação</Th>
+                <Th>Data da escala</Th>
                 <Th>Ações</Th>
               </Tr>
             </thead>
