@@ -42,6 +42,7 @@ const EscalasList = () => {
                 <Th>Igreja</Th>
                 <Th>Horário</Th>
                 <Th>Data da escala</Th>
+                <Th>Tipo de cerimonia</Th>
                 <Th>Ações</Th>
               </Tr>
             </thead>
@@ -49,9 +50,10 @@ const EscalasList = () => {
               {/* Renderize as escalas no corpo da tabela */}
               {escalas.map((escala, index) => (
                 <Tr key={index}>
-                  <Td>{escala.nome_igreja}</Td>
+                  <Td>{escala.nome_capela}</Td>
                   <Td>{escala.horario_missa}</Td>
                   <Td>{escala.data_escala}</Td>
+                  <Td>{escala.tipo_cerimonia}</Td>
                   <Td>
                     <Flex justify="space-around">
                       <Button

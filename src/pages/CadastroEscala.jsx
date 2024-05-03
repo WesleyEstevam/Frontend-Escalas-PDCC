@@ -29,7 +29,8 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
         ...escalas,
         {
           data_escala: "",
-          nome_igreja: "",
+          tipo_cerimonia: "",
+          nome_capela: "",
           horario_missa: "",
           Turibulo: [{ nome_coroinha: "" }],
           Naveta: [{ nome_coroinha: "" }],
@@ -49,12 +50,13 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
 
   const handleChange = (index, atributo, subindex, value) => {
     const novasEscalas = [...escalas];
-    // Se o atributo for "nome_igreja" ou "horario_missa",
+    // Se o atributo for "nome_capela" ou "horario_missa",
     // definimos diretamente o valor no array principal
     if (
-      atributo === "nome_igreja" ||
+      atributo === "nome_capela" ||
       atributo === "horario_missa" ||
-      atributo === "data_escala"
+      atributo === "data_escala" ||
+      atributo === "tipo_cerimonia"
     ) {
       novasEscalas[index][atributo] = value;
     } else {
@@ -89,12 +91,12 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
                   marginTop="20px"
                 >
                   <FormControl>
-                    <FormLabel>Nome da Igreja</FormLabel>
+                    <FormLabel>Escala do dia</FormLabel>
                     <Input
-                      type="text"
-                      value={escala.nome_igreja}
+                      type="date"
+                      value={escala.data_escala}
                       onChange={(e) =>
-                        handleChange(index, "nome_igreja", 0, e.target.value)
+                        handleChange(index, "data_escala", 0, e.target.value)
                       }
                     />
                   </FormControl>
@@ -109,19 +111,29 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
                     />
                   </FormControl>
                   <FormControl>
-                    <FormLabel>Escala do dia</FormLabel>
+                    <FormLabel>Tipo de cerimonia</FormLabel>
                     <Input
-                      type="date"
-                      value={escala.data_escala}
+                      type="text"
+                      value={escala.tipo_cerimonia}
                       onChange={(e) =>
-                        handleChange(index, "data_escala", 0, e.target.value)
+                        handleChange(index, "tipo_cerimonia", 0, e.target.value)
+                      }
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Nome da Igreja</FormLabel>
+                    <Input
+                      type="text"
+                      value={escala.nome_capela}
+                      onChange={(e) =>
+                        handleChange(index, "nome_capela", 0, e.target.value)
                       }
                     />
                   </FormControl>
                   {Object.entries(escala).map(
                     ([atributo, lista]) =>
                       // Exclui o botão para Nome da Igreja e Horário da Missa
-                      atributo !== "nome_igreja" &&
+                      atributo !== "nome_capela" &&
                       atributo !== "horario_missa" && (
                         <div key={atributo}>
                           {Array.isArray(lista) &&
