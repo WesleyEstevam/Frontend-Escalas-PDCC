@@ -51,7 +51,7 @@ const EscalasList = () => {
                 <Tr key={index}>
                   <Td>{escala.nome_igreja}</Td>
                   <Td>{escala.horario_missa}</Td>
-                  <Td>{escala.criado}</Td>
+                  <Td>{escala.data_escala}</Td>
                   <Td>
                     <Flex justify="space-around">
                       <Button

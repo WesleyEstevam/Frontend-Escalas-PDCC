@@ -28,6 +28,7 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
       setEscalas([
         ...escalas,
         {
+          data_escala: "",
           nome_igreja: "",
           horario_missa: "",
           Turibulo: [{ nome_coroinha: "" }],
@@ -50,7 +51,11 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
     const novasEscalas = [...escalas];
     // Se o atributo for "nome_igreja" ou "horario_missa",
     // definimos diretamente o valor no array principal
-    if (atributo === "nome_igreja" || atributo === "horario_missa") {
+    if (
+      atributo === "nome_igreja" ||
+      atributo === "horario_missa" ||
+      atributo === "data_escala"
+    ) {
       novasEscalas[index][atributo] = value;
     } else {
       // Caso contrário, atribuímos ao subitem correspondente
@@ -69,7 +74,7 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
       <Button marginLeft="90%" colorScheme="blue" onClick={adicionarEscala}>
         Nova Escala
       </Button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Cadastro de Escalas</ModalHeader>
@@ -96,10 +101,20 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
                   <FormControl>
                     <FormLabel>Horário da Missa</FormLabel>
                     <Input
-                      type="text"
+                      type="time"
                       value={escala.horario_missa}
                       onChange={(e) =>
                         handleChange(index, "horario_missa", 0, e.target.value)
+                      }
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Escala do dia</FormLabel>
+                    <Input
+                      type="date"
+                      value={escala.data_escala}
+                      onChange={(e) =>
+                        handleChange(index, "data_escala", 0, e.target.value)
                       }
                     />
                   </FormControl>
