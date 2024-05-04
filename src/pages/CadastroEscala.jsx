@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   FormControl,
@@ -6,7 +6,7 @@ import {
   Input,
   VStack,
   Grid,
-  HStack,
+  Select,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -18,51 +18,75 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
+import axios from "axios";
+import { baseURL } from "../api/api";
 
 const CadastroEscalas = ({ onSalvarEscalas }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [escalas, setEscalas] = useState([]);
+  const [nomesCoroinhas, setNomesCoroinhas] = useState([]);
+  const [nomesObjetosLiturgicos, setNomesObjetosLiturgicos] = useState([]);
+  const [nomesIgrejas, setNomesIgrejas] = useState([]); // Lista de nomes de igrejas
+  const [horariosMissas, setHorariosMissas] = useState([]); // Lista de horários de missas
+
+  useEffect(() => {
+    const fetchNomesCoroinhas = async () => {
+      try {
+        const response = await axios.get(`${baseURL}coroinhas`);
+        setNomesCoroinhas(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar nomes dos coroinhas:", error);
+      }
+    };
+
+    const fetchNomesObjetosLiturgicos = async () => {
+      try {
+        const response = await axios.get(`${baseURL}objetos`);
+        setNomesObjetosLiturgicos(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar nomes dos objetos litúrgicos:", error);
+      }
+    };
+
+    // Função para buscar os nomes das igrejas
+    const fetchNomesIgrejas = async () => {
+      try {
+        const response = await axios.get(`${baseURL}horarios`);
+        setNomesIgrejas(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar nomes das igrejas:", error);
+      }
+    };
+
+    // Função para buscar os horários das missas
+    const fetchHorariosMissas = async () => {
+      try {
+        const response = await axios.get(`${baseURL}horarios`);
+        setHorariosMissas(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar horários das missas:", error);
+      }
+    };
+
+    fetchNomesCoroinhas();
+    fetchNomesObjetosLiturgicos();
+    fetchNomesIgrejas(); // Chamando a função para buscar os nomes das igrejas
+    fetchHorariosMissas(); // Chamando a função para buscar os horários das missas
+  }, []);
 
   const adicionarEscala = () => {
     setIsOpen(true),
       setEscalas([
-        ...escalas,
         {
-          data_escala: "",
-          tipo_cerimonia: "",
-          nome_capela: "",
-          horario_missa: "",
-          Turibulo: [{ nome_coroinha: "" }],
-          Naveta: [{ nome_coroinha: "" }],
-          "Castiçal 1": [{ nome_coroinha: "" }],
-          "Castiçal 2": [{ nome_coroinha: "" }],
-          Cruz: [{ nome_coroinha: "" }],
-          Missal: [{ nome_coroinha: "" }],
+          nome_coroinha: "",
+          objeto_liturgico: "",
         },
       ]);
   };
 
-  const adicionarCampo = (index, atributo) => {
-    const novasEscalas = [...escalas];
-    novasEscalas[index][atributo].push({ nome_coroinha: "" });
-    setEscalas(novasEscalas);
-  };
-
   const handleChange = (index, atributo, subindex, value) => {
     const novasEscalas = [...escalas];
-    // Se o atributo for "nome_capela" ou "horario_missa",
-    // definimos diretamente o valor no array principal
-    if (
-      atributo === "nome_capela" ||
-      atributo === "horario_missa" ||
-      atributo === "data_escala" ||
-      atributo === "tipo_cerimonia"
-    ) {
-      novasEscalas[index][atributo] = value;
-    } else {
-      // Caso contrário, atribuímos ao subitem correspondente
-      novasEscalas[index][atributo][subindex].nome_coroinha = value;
-    }
+    novasEscalas[index][atributo][subindex] = value;
     setEscalas(novasEscalas);
   };
 
@@ -82,94 +106,133 @@ const CadastroEscalas = ({ onSalvarEscalas }) => {
           <ModalHeader>Cadastro de Escalas</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack spacing={4} align="center">
-              {escalas.map((escala, index) => (
-                <Grid
-                  key={index}
-                  templateColumns="repeat(2, 1fr)"
-                  gap={8}
-                  marginTop="20px"
-                >
-                  <FormControl>
-                    <FormLabel>Escala do dia</FormLabel>
-                    <Input
-                      type="date"
-                      value={escala.data_escala}
-                      onChange={(e) =>
-                        handleChange(index, "data_escala", 0, e.target.value)
-                      }
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Horário da Missa</FormLabel>
-                    <Input
-                      type="time"
-                      value={escala.horario_missa}
-                      onChange={(e) =>
-                        handleChange(index, "horario_missa", 0, e.target.value)
-                      }
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Tipo de cerimonia</FormLabel>
-                    <Input
-                      type="text"
-                      value={escala.tipo_cerimonia}
-                      onChange={(e) =>
-                        handleChange(index, "tipo_cerimonia", 0, e.target.value)
-                      }
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Nome da Igreja</FormLabel>
-                    <Input
-                      type="text"
-                      value={escala.nome_capela}
-                      onChange={(e) =>
-                        handleChange(index, "nome_capela", 0, e.target.value)
-                      }
-                    />
-                  </FormControl>
-                  {Object.entries(escala).map(
-                    ([atributo, lista]) =>
-                      // Exclui o botão para Nome da Igreja e Horário da Missa
-                      atributo !== "nome_capela" &&
-                      atributo !== "horario_missa" && (
-                        <div key={atributo}>
-                          {Array.isArray(lista) &&
-                            lista.map((item, subindex) => (
-                              <HStack key={subindex}>
-                                <FormControl>
-                                  <FormLabel>{atributo}</FormLabel>
-                                  <Input
-                                    type="text"
-                                    value={item.nome_coroinha}
-                                    onChange={(e) =>
-                                      handleChange(
-                                        index,
-                                        atributo,
-                                        subindex,
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                </FormControl>
-                                {/* Adicione o botão de adicionar ao lado do input */}
-                                <Button
-                                  onClick={() =>
-                                    adicionarCampo(index, atributo)
-                                  }
-                                >
-                                  +
-                                </Button>
-                              </HStack>
-                            ))}
-                        </div>
-                      )
-                  )}
-                </Grid>
-              ))}
-            </VStack>
+            <Grid templateColumns="repeat(2, 1fr)" gap={8} marginTop="20px">
+              <VStack spacing={4}>
+                <FormControl>
+                  <FormLabel>Escala do dia</FormLabel>
+                  <Input
+                    type="date"
+                    value={escalas.data_escala}
+                    onChange={(e) =>
+                      handleChange(0, "data_escala", 0, e.target.value)
+                    }
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Horário da Missa</FormLabel>
+                  <Select
+                    value={escalas.horario_missa}
+                    onChange={(e) =>
+                      handleChange(0, "horario_missa", 0, e.target.value)
+                    }
+                  >
+                    {horariosMissas.map((horario) => (
+                      <option key={horario.id} value={horario.horario_missa}>
+                        {horario.horario_missa}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                {Object.entries(escalas).map(
+                  ([atributo, lista]) =>
+                    atributo !== "nome_capela" &&
+                    atributo !== "horario_missa" &&
+                    atributo !== "data_escala" && (
+                      <div key={atributo}>
+                        {Array.isArray(lista) &&
+                          lista.map((item, subindex) => (
+                            <FormControl key={subindex}>
+                              <FormLabel>{atributo}</FormLabel>
+                              <Select
+                                value={item.nome_coroinha}
+                                onChange={(e) =>
+                                  handleChange(
+                                    0,
+                                    atributo,
+                                    subindex,
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                {nomesCoroinhas.map((coroinha) => (
+                                  <option
+                                    key={coroinha.id}
+                                    value={coroinha.nome}
+                                  >
+                                    {coroinha.nome}
+                                  </option>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          ))}
+                      </div>
+                    )
+                )}
+              </VStack>
+              <VStack spacing={4}>
+                <FormControl>
+                  <FormLabel>Nome da Igreja</FormLabel>
+                  <Select
+                    value={escalas.nome_capela}
+                    onChange={(e) =>
+                      handleChange(0, "nome_capela", 0, e.target.value)
+                    }
+                  >
+                    {nomesIgrejas.map((igreja) => (
+                      <option key={igreja.id} value={igreja.nome_capela}>
+                        {igreja.nome_capela}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Tipo de cerimonia</FormLabel>
+                  <Input
+                    type="text"
+                    value={escalas.tipo_cerimonia}
+                    onChange={(e) =>
+                      handleChange(0, "tipo_cerimonia", 0, e.target.value)
+                    }
+                  />
+                </FormControl>
+                {Object.entries(escalas).map(
+                  ([atributo, lista]) =>
+                    atributo !== "nome_capela" &&
+                    atributo !== "horario_missa" &&
+                    atributo !== "data_escala" && (
+                      <div key={atributo}>
+                        {Array.isArray(lista) &&
+                          lista.map((item, subindex) => (
+                            <FormControl key={subindex}>
+                              <FormLabel>{atributo}</FormLabel>
+                              <Select
+                                value={item.nome_objeto}
+                                onChange={(e) =>
+                                  handleChange(
+                                    0,
+                                    atributo,
+                                    subindex,
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                {nomesObjetosLiturgicos.map((objeto) => (
+                                  <option
+                                    key={objeto.id}
+                                    value={objeto.nome_objeto}
+                                  >
+                                    {objeto.nome_objeto}
+                                  </option>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          ))}
+                      </div>
+                    )
+                )}
+              </VStack>
+            </Grid>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={handleSave}>

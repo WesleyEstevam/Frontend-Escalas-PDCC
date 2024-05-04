@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Flex, Box, Table, Td, Th, Tr, Button, Text } from "@chakra-ui/react";
 import CadastroEscalas from "../pages/CadastroEscala";
+import axios from "axios";
+import { baseURL } from "../api/api";
 
 const EscalasList = () => {
   const [escalas, setEscalas] = useState([]);
-
-  console.log(escalas);
 
   // Função para receber as escalas do modal
   const salvarEscalas = (novaEscalas) => {
     setEscalas(novaEscalas);
   };
+
+  useEffect(() => {
+    const fetchEscalas = async () => {
+      try {
+        const response = await axios.get(`${baseURL}escalas`);
+        setEscalas(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar as escalas:", error);
+      }
+    };
+    fetchEscalas();
+  }, []);
 
   // Funções de ação (visualizar, editar, deletar) - EXEMPLOS
   const visualizarEscala = (escala) => {
@@ -26,6 +38,10 @@ const EscalasList = () => {
   const deletarEscala = (escala) => {
     // Implementar lógica para deletar a escala (confirmar, remover do array, etc.)
     console.log("Deletando escala:", escala);
+  };
+
+  const compartilharEscala = (escala) => {
+    console.log("Escala " + escala + "compartilhada");
   };
 
   return (
@@ -50,10 +66,10 @@ const EscalasList = () => {
               {/* Renderize as escalas no corpo da tabela */}
               {escalas.map((escala, index) => (
                 <Tr key={index}>
-                  <Td>{escala.nome_capela}</Td>
-                  <Td>{escala.horario_missa}</Td>
+                  <Td>{escala.horarios_missa.nome_capela}</Td>
+                  <Td>{escala.horarios_missa.horario_missa}</Td>
                   <Td>{escala.data_escala}</Td>
-                  <Td>{escala.tipo_cerimonia}</Td>
+                  <Td>{escala.horarios_missa.tipo_cerimonia}</Td>
                   <Td>
                     <Flex justify="space-around">
                       <Button
@@ -79,6 +95,14 @@ const EscalasList = () => {
                         onClick={() => deletarEscala(escala)}
                       >
                         Deletar
+                      </Button>
+                      <Button
+                        size="xs"
+                        variant="ghost"
+                        colorScheme="green"
+                        onClick={() => compartilharEscala(escala)}
+                      >
+                        Compartilhar
                       </Button>
                     </Flex>
                   </Td>
