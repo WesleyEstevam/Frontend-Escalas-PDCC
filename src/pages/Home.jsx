@@ -5,7 +5,7 @@ import { Box } from "@chakra-ui/react";
 function Home() {
   return (
     <>
-      <Box bg="#ec3c21">
+      <Box backgroundColor="#ffffd7">
         <Header />
         <EscalasList />
       </Box>

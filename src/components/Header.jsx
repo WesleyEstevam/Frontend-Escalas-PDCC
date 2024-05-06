@@ -10,16 +10,17 @@ const Header = () => {
       <Box
         as="header"
         color="#FFFFFF"
+        bg={theme.colors.brand.primary}
         p={4}
         display="flex"
         alignItems="center"
         justifyContent="space-between"
       >
-        <Image src={logoParoquia} alt="Logo Paroquia São José" h={60} />
-        <Text fontSize="5xl" fontWeight="bold">
+        <Image src={logoParoquia} alt="Logo Paroquia São José" h={55} />
+        <Text fontSize="3xl" fontWeight="bold">
           Pastoral dos Coroinhas e Cerimoniários
         </Text>
-        <Image src={imgSaoTarcisio} alt="Padroeiro dos coroinhas" h={60} />
+        <Image src={imgSaoTarcisio} alt="Padroeiro dos coroinhas" h={55} />
       </Box>
     </ChakraProvider>
   );

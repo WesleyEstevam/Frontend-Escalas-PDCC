@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
-import { Flex, Box, Table, Td, Th, Tr, Button, Text } from "@chakra-ui/react";
-import CadastroEscalas from "../pages/CadastroEscala";
+import {
+  Flex,
+  Box,
+  Table,
+  Td,
+  Th,
+  Tr,
+  Button,
+  Text,
+  Link,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { baseURL } from "../api/api";
 
 const EscalasList = () => {
   const [escalas, setEscalas] = useState([]);
-
-  // Função para receber as escalas do modal
-  const salvarEscalas = (novaEscalas) => {
-    setEscalas(novaEscalas);
-  };
 
   useEffect(() => {
     const fetchEscalas = async () => {
@@ -49,7 +53,11 @@ const EscalasList = () => {
       <Text textAlign="center" margin="20px" fontSize="4xl" fontWeight="bold">
         Escalas
       </Text>
-      <CadastroEscalas onSalvarEscalas={salvarEscalas} />
+      <Link href="/cadastro-escala">
+        <Button marginLeft="80%" colorScheme="blue">
+          Nova Escala
+        </Button>
+      </Link>
       <Flex justify="space-around" align="center">
         <Box>
           <Table>
