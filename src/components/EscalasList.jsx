@@ -75,9 +75,9 @@ const EscalasList = () => {
               {escalas.map((escala, index) => (
                 <Tr key={index}>
                   <Td>{escala.horarios_missa.nome_capela}</Td>
-                  <Td>{escala.horarios_missa.horario_missa}</Td>
+                  <Td>{escala.horario_missa}</Td>
                   <Td>{escala.data_escala}</Td>
-                  <Td>{escala.horarios_missa.tipo_cerimonia}</Td>
+                  <Td>{escala.tipo_cerimonia}</Td>
                   <Td>
                     <Flex justify="space-around">
                       <Button

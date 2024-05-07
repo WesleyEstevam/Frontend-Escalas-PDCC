@@ -109,11 +109,15 @@ const AddCoroinha = () => {
                     handleChange(0, "horario_missa", e.target.value)
                   }
                 >
-                  {horariosMissas.map((horario) => (
-                    <option key={horario.id} value={horario.horario_missa}>
-                      {horario.horario_missa}
-                    </option>
-                  ))}
+                  <option key={escalas.id}>-</option>
+                  <option key={escalas.id}>07:00h</option>
+                  <option key={escalas.id}>09:00h</option>
+                  <option key={escalas.id}>11:00h</option>
+                  <option key={escalas.id}>17:00h</option>
+                  <option key={escalas.id}>18:00h</option>
+                  <option key={escalas.id}>18:30h</option>
+                  <option key={escalas.id}>19:00h</option>
+                  <option key={escalas.id}>19:30h</option>
                 </Select>
               </FormControl>
             </VStack>
@@ -122,7 +126,7 @@ const AddCoroinha = () => {
                 <FormLabel>Tipo de cerimonia</FormLabel>
                 <Input
                   type="text"
-                  value={escalas.tipo_cerimonia}
+                  placeholder="Ex: Domingo de Ramos"
                   onChange={(e) =>
                     handleChange(0, "tipo_cerimonia", e.target.value)
                   }
