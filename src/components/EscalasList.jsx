@@ -39,9 +39,19 @@ const EscalasList = () => {
     console.log("Editando escala:", escala);
   };
 
-  const deletarEscala = (escala) => {
+  const deletarEscala = (id_escala) => {
     // Implementar lógica para deletar a escala (confirmar, remover do array, etc.)
-    console.log("Deletando escala:", escala);
+    axios
+      .delete(`${baseURL}escalas/${id_escala}`)
+      .then(() => {
+        const novaLista = escalas.filter(
+          (escala) => escala.id_escala !== id_escala
+        );
+        setEscalas(novaLista);
+      })
+      .catch((error) => {
+        console.log("Erro ao excluir a escala: " + error);
+      });
   };
 
   const compartilharEscala = (escala) => {
@@ -100,7 +110,7 @@ const EscalasList = () => {
                         size="xs"
                         variant="ghost"
                         colorScheme="red"
-                        onClick={() => deletarEscala(escala)}
+                        onClick={() => deletarEscala(escala.id_escala)}
                       >
                         Deletar
                       </Button>

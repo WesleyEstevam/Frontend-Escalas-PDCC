@@ -61,7 +61,6 @@ const CadastrarEscala = () => {
         ...escala,
         id_capela: parseInt(escala.id_capela),
       });
-      console.log("Escala salva com sucesso:", escala);
     } catch (error) {
       console.error("Ops! Ocorreu um erro:", error);
     }
