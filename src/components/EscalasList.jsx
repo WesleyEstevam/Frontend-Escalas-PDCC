@@ -74,7 +74,7 @@ const EscalasList = () => {
               {/* Renderize as escalas no corpo da tabela */}
               {escalas.map((escala, index) => (
                 <Tr key={index}>
-                  <Td>{escala.horarios_missa.nome_capela}</Td>
+                  <Td>{escala.capelas.nome_capela}</Td>
                   <Td>{escala.horario_missa}</Td>
                   <Td>{escala.data_escala}</Td>
                   <Td>{escala.tipo_cerimonia}</Td>

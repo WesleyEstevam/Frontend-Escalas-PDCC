@@ -6,23 +6,22 @@ import {
   Grid,
   Select,
   Center,
-  Container,
-  Input,
   Heading,
   Box,
-  Link,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { baseURL } from "../api/api";
 import { useState, useEffect } from "react";
 
-const AddCoroinha = () => {
+const AdicionarCoroinha = () => {
   const [nomesCoroinhas, setNomesCoroinhas] = useState([]);
   const [nomesObjetosLiturgicos, setNomesObjetosLiturgicos] = useState([]);
   const [escalas, setEscalas] = useState([
-    { nome_coroinha: "", objeto_liturgico: "" },
+    {
+      id_coroinha: null,
+      id_objeto: null,
+    },
   ]);
-  const [horariosMissas, setHorariosMissas] = useState([]);
 
   useEffect(() => {
     const fetchNomesCoroinhas = async () => {
@@ -43,15 +42,6 @@ const AddCoroinha = () => {
       }
     };
 
-    const fetchHorariosMissas = async () => {
-      try {
-        const response = await axios.get(`${baseURL}horarios`);
-        setHorariosMissas(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar horários das missas:", error);
-      }
-    };
-    fetchHorariosMissas();
     fetchNomesCoroinhas();
     fetchNomesObjetosLiturgicos();
   }, []);
@@ -59,151 +49,86 @@ const AddCoroinha = () => {
   const handleChange = (index, atributo, value) => {
     const novasEscalas = [...escalas];
     novasEscalas[index][atributo] = value;
+    console.log(novasEscalas);
     setEscalas(novasEscalas);
   };
 
   const handleSave = () => {
     // Implementar a lógica de salvar as escalas
+    axios
+      .put(baseURL + "escalas", escalas)
+      .then(() => {
+        console.log(escalas);
+      })
+      .catch((error) => {
+        console.error("ops! ocorreu um erro " + error);
+      });
   };
 
-  const adicionarCoroinha = () => {
-    setEscalas([...escalas, { nome_coroinha: "", objeto_liturgico: "" }]);
+  const addCoroinha = () => {
+    setEscalas([...escalas]);
   };
 
   return (
-    <>
-      <Box backgroundColor="#ffffd7">
-        <Link href="/">
-          <Button margin={2} colorScheme="gray">
-            Voltar
-          </Button>
-        </Link>
-        <Container backgroundColor="#ffffd7">
-          <Center>
-            <Heading as="h3" size="lg">
-              Nova Escala
-            </Heading>
-          </Center>
-          <Grid templateColumns="repeat(2, 1fr)" gap={8} marginTop="20px">
-            <VStack spacing={4}>
-              <FormControl>
-                <FormLabel>Nome da Igreja</FormLabel>
-                <Select
-                  value={escalas.nome_capela}
-                  onChange={(e) =>
-                    handleChange(0, "nome_capela", e.target.value)
-                  }
-                >
-                  {horariosMissas.map((igreja) => (
-                    <option key={igreja.id} value={igreja.nome_capela}>
-                      {igreja.nome_capela}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl>
-                <FormLabel>Horário da Missa</FormLabel>
-                <Select
-                  value={escalas.horario_missa}
-                  onChange={(e) =>
-                    handleChange(0, "horario_missa", e.target.value)
-                  }
-                >
-                  <option key={escalas.id}>-</option>
-                  <option key={escalas.id}>07:00h</option>
-                  <option key={escalas.id}>09:00h</option>
-                  <option key={escalas.id}>11:00h</option>
-                  <option key={escalas.id}>17:00h</option>
-                  <option key={escalas.id}>18:00h</option>
-                  <option key={escalas.id}>18:30h</option>
-                  <option key={escalas.id}>19:00h</option>
-                  <option key={escalas.id}>19:30h</option>
-                </Select>
-              </FormControl>
-            </VStack>
-            <VStack spacing={4}>
-              <FormControl>
-                <FormLabel>Tipo de cerimonia</FormLabel>
-                <Input
-                  type="text"
-                  placeholder="Ex: Domingo de Ramos"
-                  onChange={(e) =>
-                    handleChange(0, "tipo_cerimonia", e.target.value)
-                  }
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Escala do dia</FormLabel>
-                <Input
-                  type="date"
-                  value={escalas.data_escala}
-                  onChange={(e) =>
-                    handleChange(0, "data_escala", e.target.value)
-                  }
-                />
-              </FormControl>
-            </VStack>
-          </Grid>
-          <Center margin={10}>
-            <Heading as="h5" size="md">
-              Adicionar Coroinha
-            </Heading>
-          </Center>
-          {escalas.map((escala, index) => (
-            <Grid
-              key={index}
-              templateColumns="repeat(2, 1fr)"
-              gap={8}
-              marginTop="20px"
-            >
-              <VStack spacing={4}>
-                <FormControl>
-                  <FormLabel>Coroinha</FormLabel>
-                  <Select
-                    value={escala.nome_coroinha}
-                    onChange={(e) =>
-                      handleChange(index, "nome_coroinha", e.target.value)
-                    }
-                  >
-                    {nomesCoroinhas.map((coroinha) => (
-                      <option key={coroinha.id} value={coroinha.nome_coroinha}>
-                        {coroinha.nome_coroinha}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-              </VStack>
-              <VStack spacing={4}>
-                <FormControl>
-                  <FormLabel>Objeto Litúrgico</FormLabel>
-                  <Select
-                    value={escala.objeto_liturgico}
-                    onChange={(e) =>
-                      handleChange(index, "objeto_liturgico", e.target.value)
-                    }
-                  >
-                    {nomesObjetosLiturgicos.map((objeto) => (
-                      <option key={objeto.id} value={objeto.nome_objeto}>
-                        {objeto.nome_objeto}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-              </VStack>
-            </Grid>
-          ))}
-          <Center mt={10}>
-            <Button colorScheme="red" mr={3} onClick={adicionarCoroinha}>
-              Adicionar Coroinha
-            </Button>
-            <Button colorScheme="blue" mr={3} onClick={handleSave}>
-              Salvar
-            </Button>
-          </Center>
-        </Container>
-      </Box>
-    </>
+    <Box>
+      <Center margin={10}>
+        <Heading as="h5" size="md">
+          Adicionar Coroinha
+        </Heading>
+      </Center>
+      {escalas.map((escala, index) => (
+        <Grid
+          key={index}
+          templateColumns="repeat(2, 1fr)"
+          gap={8}
+          marginTop="20px"
+        >
+          <VStack spacing={4}>
+            <FormControl>
+              <FormLabel>Coroinha</FormLabel>
+              <Select
+                value={escala.id_coroinha || ""}
+                onChange={(e) =>
+                  handleChange(index, "id_coroinha", parseInt(e.target.value))
+                }
+              >
+                {nomesCoroinhas.map((coroinha) => (
+                  <option key={coroinha.id} value={coroinha.id_coroinha}>
+                    {coroinha.nome_coroinha}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </VStack>
+          <VStack spacing={4}>
+            <FormControl>
+              <FormLabel>Objeto Litúrgico</FormLabel>
+              <Select
+                value={escala.id_objeto || ""}
+                onChange={(e) =>
+                  handleChange(index, "id_objeto", parseInt(e.target.value))
+                }
+              >
+                {nomesObjetosLiturgicos.map((objeto) => (
+                  <option key={objeto.id} value={objeto.nome_objeto}>
+                    {objeto.nome_objeto}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </VStack>
+        </Grid>
+      ))}
+      <Center mt={10}>
+        <Button colorScheme="red" mr={3} onClick={addCoroinha}>
+          Adicionar Coroinha
+        </Button>
+        <Button colorScheme="blue" mr={3} onClick={handleSave}>
+          Salvar
+        </Button>
+      </Center>
+    </Box>
   );
 };
 
-export default AddCoroinha;
+export default AdicionarCoroinha;

@@ -1,16 +1,16 @@
 import { Box } from "@chakra-ui/react";
-import AdicionarCoroinha from "../components/AdicionarCoroinha";
+import CadastrarEscala from "../components/CadastrarEscala";
 import Header from "../components/Header";
 
-function AddCoroinha() {
+function NovaEscala() {
   return (
     <>
       <Box>
         <Header />
-        <AdicionarCoroinha />
+        <CadastrarEscala />
       </Box>
     </>
   );
 }
 
-export default AddCoroinha;
+export default NovaEscala;
