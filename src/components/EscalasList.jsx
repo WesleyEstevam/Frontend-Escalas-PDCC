@@ -9,11 +9,13 @@ import {
   Button,
   Text,
   Link,
+  IconButton,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { baseURL } from "../api/api";
-//import { alertaDeletar } from "./alertas";
 import Swal from "sweetalert2";
+import { DeleteIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
+import { FaShare } from "react-icons/fa";
 
 const EscalasList = () => {
   const [escalas, setEscalas] = useState([]);
@@ -123,7 +125,7 @@ const EscalasList = () => {
                         colorScheme="blue"
                         onClick={() => visualizarEscala(escala.id_escala)}
                       >
-                        Visualizar
+                        <ViewIcon boxSize={6} />
                       </Button>
                       <Button
                         size="xs"
@@ -131,7 +133,7 @@ const EscalasList = () => {
                         colorScheme="teal"
                         onClick={() => editarEscala(escala.id_escala)}
                       >
-                        Editar
+                        <EditIcon boxSize={6} />
                       </Button>
                       <Button
                         size="xs"
@@ -139,16 +141,16 @@ const EscalasList = () => {
                         colorScheme="red"
                         onClick={() => deletarEscala(escala.id_escala)}
                       >
-                        Deletar
+                        <DeleteIcon boxSize={6} />
                       </Button>
-                      <Button
-                        size="xs"
+                      <IconButton
+                        aria-label="Compartilhar"
+                        icon={<FaShare />}
+                        size="md"
                         variant="ghost"
                         colorScheme="green"
                         onClick={() => compartilharEscala(escala.id_escala)}
-                      >
-                        Compartilhar
-                      </Button>
+                      />
                     </Flex>
                   </Td>
                 </Tr>
