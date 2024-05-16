@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { baseURL } from "../api/api";
+//import { alertaDeletar } from "./alertas";
+import Swal from "sweetalert2";
 
 const EscalasList = () => {
   const [escalas, setEscalas] = useState([]);
@@ -30,28 +32,53 @@ const EscalasList = () => {
 
   // Funções de ação (visualizar, editar, deletar) - EXEMPLOS
   const visualizarEscala = (escala) => {
-    // Implementar lógica para visualizar a escala (abrir modal, etc.)
+    // Implementar lógica para visualizar a escala
     console.log("Visualizando escala:", escala);
   };
 
-  const editarEscala = (escala) => {
-    // Implementar lógica para editar a escala (abrir modal, etc.)
-    console.log("Editando escala:", escala);
+  const editarEscala = (id_escala) => {
+    // Implementar lógica para editar a escala
+    axios
+      .patch(`${baseURL}escalas/${id_escala}`)
+      .then(() => {
+        console.log("Atualização concluída!");
+      })
+      .catch((error) => {
+        console.log("Erro ao atualizar a escala: " + error);
+      });
   };
 
   const deletarEscala = (id_escala) => {
     // Implementar lógica para deletar a escala (confirmar, remover do array, etc.)
-    axios
-      .delete(`${baseURL}escalas/${id_escala}`)
-      .then(() => {
-        const novaLista = escalas.filter(
-          (escala) => escala.id_escala !== id_escala
-        );
-        setEscalas(novaLista);
-      })
-      .catch((error) => {
-        console.log("Erro ao excluir a escala: " + error);
-      });
+    Swal.fire({
+      title: "Você tem certeza?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Sim",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${baseURL}escalas/${id_escala}`)
+          .then(() => {
+            const novaLista = escalas.filter(
+              (escala) => escala.id_escala !== id_escala
+            );
+            setEscalas(novaLista);
+          })
+          .catch((error) => {
+            console.log("Erro ao excluir a escala: " + error);
+          });
+        Swal.fire({
+          title: "Excluída!",
+          text: "Escala excluída com sucesso!.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   const compartilharEscala = (escala) => {
@@ -94,7 +121,7 @@ const EscalasList = () => {
                         size="xs"
                         variant="ghost"
                         colorScheme="blue"
-                        onClick={() => visualizarEscala(escala)}
+                        onClick={() => visualizarEscala(escala.id_escala)}
                       >
                         Visualizar
                       </Button>
@@ -102,7 +129,7 @@ const EscalasList = () => {
                         size="xs"
                         variant="ghost"
                         colorScheme="teal"
-                        onClick={() => editarEscala(escala)}
+                        onClick={() => editarEscala(escala.id_escala)}
                       >
                         Editar
                       </Button>
@@ -118,7 +145,7 @@ const EscalasList = () => {
                         size="xs"
                         variant="ghost"
                         colorScheme="green"
-                        onClick={() => compartilharEscala(escala)}
+                        onClick={() => compartilharEscala(escala.id_escala)}
                       >
                         Compartilhar
                       </Button>

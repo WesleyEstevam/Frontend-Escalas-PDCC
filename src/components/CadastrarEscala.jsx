@@ -15,6 +15,8 @@ import {
 import axios from "axios";
 import { baseURL } from "../api/api";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { alertaCadastro } from "./alertas";
 
 const CadastrarEscala = () => {
   const [capelas, setCapelas] = useState([]);
@@ -50,20 +52,25 @@ const CadastrarEscala = () => {
     fetchCapelas();
   }, []);
 
+  const navigate = useNavigate();
   const handleSave = async () => {
     if (!escala.id_capela) {
       console.error("Por favor, selecione uma capela.");
       return;
     }
-    try {
-      // Enviando apenas o ID da capela na requisição POST
-      await axios.post(`${baseURL}escalas`, {
+    // Enviando apenas o ID da capela na requisição POST
+    await axios
+      .post(`${baseURL}escalas`, {
         ...escala,
         id_capela: parseInt(escala.id_capela),
+      })
+      .then(() => {
+        navigate("/");
+        alertaCadastro();
+      })
+      .catch((error) => {
+        console.error("Ops! Ocorreu um erro:", error);
       });
-    } catch (error) {
-      console.error("Ops! Ocorreu um erro:", error);
-    }
   };
 
   return (
