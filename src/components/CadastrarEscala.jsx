@@ -11,6 +11,7 @@ import {
   Heading,
   Box,
   Link,
+  Flex,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { baseURL } from "../api/api";
@@ -75,18 +76,20 @@ const CadastrarEscala = () => {
 
   return (
     <>
-      <Box backgroundColor="#ffffd7">
-        <Link href="/">
-          <Button margin={2} colorScheme="gray">
-            Voltar
-          </Button>
-        </Link>
-        <Container backgroundColor="#ffffd7">
-          <Center>
-            <Heading as="h3" size="lg">
-              Nova Escala
-            </Heading>
-          </Center>
+      <Box>
+        <Flex align="center" justify="space-between" margin={10}>
+          <Link href="/">
+            <Button margin={2} colorScheme="gray">
+              Voltar
+            </Button>
+          </Link>
+          <Heading as="h3" size="lg">
+            Nova Escala
+          </Heading>
+          <Box></Box>{" "}
+          {/* Este é um espaço vazio para manter o título no centro */}
+        </Flex>
+        <Container>
           <Grid templateColumns="repeat(2, 1fr)" gap={8} marginTop="20px">
             <VStack spacing={4}>
               <FormControl>

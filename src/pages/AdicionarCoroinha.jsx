@@ -5,7 +5,7 @@ import Header from "../components/Header";
 function AddCoroinha() {
   return (
     <>
-      <Box>
+      <Box backgroundColor="#ffffd7">
         <Header />
         <AdicionarCoroinha />
       </Box>

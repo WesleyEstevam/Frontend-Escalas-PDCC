@@ -8,6 +8,10 @@ export function alertaCadastro() {
   Swal.fire("Bom trabalho!", "Escala cadastrada com sucesso!", "success");
 }
 
+export function alertaAddCoroinha() {
+  Swal.fire("Bom trabalho!", "Os coroinhas foram escalados!", "success");
+}
+
 export function alertaDeletar() {
   Swal.fire({
     title: "Você tem certeza?",

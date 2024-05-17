@@ -16,9 +16,11 @@ import { baseURL } from "../api/api";
 import Swal from "sweetalert2";
 import { DeleteIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 import { FaShare } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const EscalasList = () => {
   const [escalas, setEscalas] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEscalas = async () => {
@@ -39,15 +41,7 @@ const EscalasList = () => {
   };
 
   const editarEscala = (id_escala) => {
-    // Implementar lógica para editar a escala
-    axios
-      .patch(`${baseURL}escalas/${id_escala}`)
-      .then(() => {
-        console.log("Atualização concluída!");
-      })
-      .catch((error) => {
-        console.log("Erro ao atualizar a escala: " + error);
-      });
+    navigate(`/adicionar-coroinha?data=${JSON.stringify(id_escala)}`);
   };
 
   const deletarEscala = (id_escala) => {
@@ -88,7 +82,7 @@ const EscalasList = () => {
   };
 
   return (
-    <Box backgroundColor="#ffffd7">
+    <Box>
       <Text textAlign="center" margin="20px" fontSize="4xl" fontWeight="bold">
         Escalas
       </Text>

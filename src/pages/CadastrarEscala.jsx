@@ -5,7 +5,7 @@ import Header from "../components/Header";
 function NovaEscala() {
   return (
     <>
-      <Box>
+      <Box backgroundColor="#ffffd7">
         <Header />
         <CadastrarEscala />
       </Box>
